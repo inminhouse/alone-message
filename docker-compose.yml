@@ -1,0 +1,83 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+    ports:
+      - 22181:2181
+    networks:
+      - net
+  kafka_1:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka_1
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+      - 39092:39092
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka_1:9092,PLAINTEXT_HOST://localhost:29092,PLAINTEXT_OUT://192.168.150.100:39092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT_OUT:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      # - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    networks:
+      - net
+  kafka_2:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka_2
+    depends_on:
+      - zookeeper
+    ports:
+      - 29093:29093
+      - 39093:39093
+    environment:
+      - KAFKA_BROKER_ID=2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka_2:9092,PLAINTEXT_HOST://localhost:29093,PLAINTEXT_OUT://192.168.150.100:39093
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT_OUT:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      # - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    networks:
+      - net
+  kafka_3:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka_3
+    depends_on:
+      - zookeeper
+    ports:
+      - 29094:29094
+      - 39094:39094
+    environment:
+      - KAFKA_BROKER_ID=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka_3:9092,PLAINTEXT_HOST://localhost:29094,PLAINTEXT_OUT://192.168.150.100:39094
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT_OUT:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      # - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    networks:
+      - net
+  # mariadb:
+  #   image: mariadb
+  #   container_name: message-db
+  #   ports:
+  #     - 3306:3306
+  #   environment:
+  #     - MARIADB_USER=$USER
+  #     - MARIADB_PASSWORD=$PASS
+  #     - MARIADB_ROOT_PASSWORD=$ROOT
+  #   networks:
+  #     - net
+  #   volumes:
+  #     - db:/var/lib/mysql
+  #   restart: always
+
+networks:
+  net:
+# volumes:
+#   db:
+#     external: false

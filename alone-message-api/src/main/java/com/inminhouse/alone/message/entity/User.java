@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,6 +41,7 @@ public class User implements Serializable {
 	@ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
 	private Set<Conversation> conversations;
 	
+	@JsonManagedReference(value="user")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private List<Message> messages;
 	

@@ -17,6 +17,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,6 +53,7 @@ public class Conversation implements Serializable {
 		inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false))
 	private Set<User> users;
 	
+	@JsonManagedReference(value="conversation")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "conversation")
 	private List<Message> messages;
 }
